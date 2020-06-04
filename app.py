@@ -5,6 +5,7 @@ import matplotlib.ticker as mtick
 from io import BytesIO
 import base64
 import matplotlib
+import gunicorn
 
 matplotlib.use('Agg')
 
