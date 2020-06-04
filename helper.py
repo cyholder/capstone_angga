@@ -10,22 +10,22 @@ def load_telco():
     
     # Adjust dtypes
     catcol = telco.select_dtypes('object').columns
-    telco[catcol] = telco[catcol].apply(lambda x: x.astype('______'))
+    telco[catcol] = telco[catcol].apply(lambda x: x.astype('category'))
     
     # Tenure Months to grouping categories
     def grouping_tenure(telco) :
-        if telco["_______"] <= 12 :
+        if telco["tenure_months"] <= 12 :
             return "< 1 Year"
-        elif (telco["_______"] > 12) & (telco["_______"] __ ____ ):
+        elif (telco["tenure_months"] > 12) & (telco["tenure_months"] <= 24 ):
             return "1-2 Year"
-        elif (telco["_______"] __ ____) & (telco["_______"] <= 48) :
+        elif (telco["tenure_months"] > 24) & (telco["tenure_months"] <= 48) :
             return "2-4 Year"
-        elif (telco["_______"] __ ____) & (telco["_______"] __ ____) :
+        elif (telco["tenure_months"] > 48) & (telco["tenure_months"] <= 60) :
             return "4-5 Year"
         else:
             return "> 5 Year"
         
-    telco["tenure_group"] = telco.apply(lambda telco: _______(telco), axis = 1)
+    telco["tenure_group"] = telco.apply(lambda telco: grouping_tenure(telco), axis = 1)
     
     # Adjust category order
     tenure_group = ["< 1 Year", "1-2 Year", "2-4 Year", "4-5 Year", "> 5 Year"]
@@ -35,16 +35,21 @@ def load_telco():
 
 def table_churn(data):
     table = pd.crosstab(
-    index = data['_______'],
-    columns = 'percent',
-    normalize = _______)*100
+        data['churn_label'],
+        columns = 'percent',
+        normalize = True
+    )*100
     return(table)
 
 def plot_phone(data):
     
     # ---- Phone Service Customer
 
-    ax = _______.plot(kind = 'barh', color=['#53a4b1','#c34454'], figsize = (8,6))
+    phonesrv = pd.crosstab(
+        data['phone_service'], data['churn_label'], normalize=True
+    )*100
+
+    ax = phonesrv.plot(kind = 'barh', color=['#53a4b1','#c34454'], figsize = (8,6))
 
     # Plot Configuration
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
@@ -64,8 +69,11 @@ def plot_phone(data):
 def plot_internet(data):
 
     # ---- Internet Service Customer
+    isp = pd.crosstab(
+        data['internet_service'], data['churn_label'], normalize=True
+    )*100
 
-    ax = _______.plot(kind = 'barh', color=['#53a4b1','#c34454'], figsize = (8,6))
+    ax = isp.plot(kind = 'barh', color=['#53a4b1','#c34454'], figsize = (8,6))
 
     # Plot Configuration
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
@@ -85,8 +93,9 @@ def plot_internet(data):
 def plot_tenure_churn(data):
     
     # ---- Churn Rate by Tenure Group
+    task10 = (pd.crosstab(data['tenure_group'], data['churn_label'], normalize=True)*100).round(2)
 
-    ax = ______.plot(kind = 'bar', color=['#53a4b1','#c34454'], figsize=(8, 6))
+    ax = task10.plot(kind = 'bar', color=['#53a4b1','#c34454'], figsize=(8, 6))
 
     # Plot Configuration
     ax.yaxis.set_major_formatter(mtick.PercentFormatter())
@@ -107,8 +116,9 @@ def plot_tenure_churn(data):
 def plot_tenure_cltv(data):
 
     # ---- Average Lifetime Value by Tenure
+    b = pd.crosstab(data['tenure_months'], [data['churn_label']], values=data['cltv'], aggfunc='mean')
 
-    ax = ______.plot(color=['#333333','#b3b3b3'], figsize=(8, 6),style = '.--')
+    ax = b.plot(color=['#333333','#b3b3b3'], figsize=(8, 6),style = '.--')
 
     # Plot Configuration
     plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
