@@ -136,3 +136,47 @@ def plot_tenure_cltv(data):
 
     return(result)
 
+
+def plot_arpu_internet_tenure(data):
+    # ARPU Internet by Tenure
+    b = pd.crosstab(data['tenure_months'], [data['internet_service']], values=data['monthly_charges'], aggfunc='mean', normalize=False).iloc[:,0:2]
+    aj = b.plot(color=['#cf3232','#329dcf'], figsize=(8, 6),style = '.--')
+    
+    # Plot Configuration
+    aj.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+    plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
+    plt.xticks(rotation = 360)
+    plt.legend(['DSL', 'Fiber Optic'],fancybox=True,shadow=True)
+    plt.title('Internet Service Customer')
+
+
+    # Save png file to IO buffer
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+
+    return(result)
+
+def plot_arpu_phone_tenure(data):
+    # ARPU Internet by Tenure
+    c = pd.crosstab(data['tenure_months'], [data['phone_service']], values=data['monthly_charges'], aggfunc='mean', normalize=False).loc[:,['Multiple Lines', 'Single Line']]
+    az = c.plot(color=['#cf3232','#329dcf'], figsize=(8, 6),style = '.--')
+    
+    # Plot Configuration
+    az.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+    plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
+    plt.xticks(rotation = 360)
+    plt.legend(['Multiple Lines', 'Single Line'],fancybox=True,shadow=True)
+    plt.title('Phone Service Customer')
+
+
+    # Save png file to IO buffer
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+
+    return(result)

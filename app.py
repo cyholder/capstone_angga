@@ -9,7 +9,7 @@ import matplotlib
 matplotlib.use('Agg')
 
 
-from helper import load_telco, table_churn, plot_phone, plot_internet, plot_tenure_cltv, plot_tenure_churn
+from helper import load_telco, table_churn, plot_phone, plot_internet, plot_tenure_cltv, plot_tenure_churn, plot_arpu_internet_tenure, plot_arpu_phone_tenure
 
 app = Flask(__name__)
 
@@ -39,14 +39,18 @@ def index():
 	plot_internet_res = plot_internet(raw)
 	plot_tenure_cltv_res = plot_tenure_cltv(raw)
 	plot_tenure_churn_res = plot_tenure_churn(raw)
+	plot_arpu_internet_tenure_res = plot_arpu_internet_tenure(raw)
+	plot_arpu_phone_tenure_res = plot_arpu_phone_tenure(raw)
 
 	# render to html
 	return render_template('index.html',
-		   card_data = card_data, 
-		 plot_phone_res=plot_phone_res,
-		 plot_internet_res=plot_internet_res,
-		 plot_tenure_cltv_res=plot_tenure_cltv_res,
-		 plot_tenure_churn_res=plot_tenure_churn_res
+			card_data = card_data, 
+			plot_phone_res=plot_phone_res,
+			plot_internet_res=plot_internet_res,
+			plot_tenure_cltv_res=plot_tenure_cltv_res,
+			plot_tenure_churn_res=plot_tenure_churn_res,
+			plot_arpu_internet_tenure_res = plot_arpu_internet_tenure_res,
+			plot_arpu_phone_tenure_res = plot_arpu_phone_tenure_res
 		)
 
 
