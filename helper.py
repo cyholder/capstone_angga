@@ -180,3 +180,83 @@ def plot_arpu_phone_tenure(data):
     result = str(figdata_png)[2:-1]
 
     return(result)
+
+
+def plot_arpu_phone_single(data):
+    c = pd.crosstab(data['tenure_months'], [data['phone_service'], data['churn_label']], values=data['monthly_charges'], aggfunc='mean', normalize=False).loc[:,['Single Line']]
+    aj = c.plot(color=['#ffbdbd','#cf3232', '#bde8fc', '#329dcf'], figsize=(8, 6),style = '.-')
+
+    aj.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+    plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
+    plt.xticks(rotation = 360)
+    plt.legend(['Active', 'Churned', 'Single Line', 'Single Line (Churned)'],fancybox=True,shadow=True)
+    plt.title('Phone Single Line')
+
+    # Save png file to IO buffer
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+
+    return(result)
+
+
+def plot_arpu_phone_multi(data):
+    c = pd.crosstab(data['tenure_months'], [data['phone_service'], data['churn_label']], values=data['monthly_charges'], aggfunc='mean', normalize=False).loc[:,['Multiple Lines']]
+    aj = c.plot(color=['#ffbdbd','#cf3232', '#bde8fc', '#329dcf'], figsize=(8, 6),style = '.-')
+
+    aj.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+    plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
+    plt.xticks(rotation = 360)
+    plt.legend(['Active', 'Churned', 'Single Line', 'Single Line (Churned)'],fancybox=True,shadow=True)
+    plt.title('Phone Multiple Lines')
+
+    # Save png file to IO buffer
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+
+    return(result)
+
+
+def plot_arpu_inet_fo(data):
+    c = pd.crosstab(data['tenure_months'], [data['internet_service'], data['churn_label']], values=data['monthly_charges'], aggfunc='mean', normalize=False).loc[:,['Fiber optic']]
+    ad = c.plot(color=['#bde8fc', '#329dcf'], figsize=(8, 6),style = '.-')
+
+    ad.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+    plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
+    plt.xticks(rotation = 360)
+    plt.legend(['Active', 'Churned', 'Single Line', 'Single Line (Churned)'],fancybox=True,shadow=True)
+    plt.title('Internet Fiber Optic')
+
+    # Save png file to IO buffer
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+
+    return(result)
+
+
+def plot_arpu_dsl(data):
+    d = pd.crosstab(data['tenure_months'], [data['internet_service'], data['churn_label']], values=data['monthly_charges'], aggfunc='mean', normalize=False).loc[:,['DSL']]
+    an = d.plot(color=['#bde8fc', '#329dcf'], figsize=(8, 6),style = '.-')
+
+    an.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+    plt.axes().get_xaxis().set_label_text('Tenure (in Months)')
+    plt.xticks(rotation = 360)
+    plt.legend(['Active', 'Churned'],fancybox=True,shadow=True)
+    plt.title('Internet DSL')
+
+    # Save png file to IO buffer
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+    return(result)
+
